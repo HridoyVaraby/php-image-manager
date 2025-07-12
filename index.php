@@ -56,13 +56,15 @@ $images = glob(UPLOADS_DIR . '*.{jpg,jpeg,png,gif,webp}', GLOB_BRACE);
             <h2 class="text-xl font-semibold mb-4">Uploaded Images</h2>
             <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
                 <?php foreach ($images as $image): ?>
-                    <div class="bg-white rounded-lg shadow-md overflow-hidden">
-                                                <img src="<?php echo BASE_URL . $image; ?>" alt="" class="w-full h-32 object-cover">
-                        <div class="p-4">
-                            <div class="flex justify-between items-center">
-                                                                <button onclick="copyLink('<?php echo BASE_URL . $image; ?>')" class="text-blue-500 hover:underline">Copy Link</button>
-                                                                <a href="#" onclick="renameFile('<?php echo basename($image); ?>', '<?php echo $_SESSION['csrf_token']; ?>')" class="text-green-500 hover:underline">Rename</a>
-                                <a href="delete.php?file=<?php echo basename($image); ?>&csrf_token=<?php echo $_SESSION['csrf_token']; ?>" onclick="return confirm('Are you sure you want to delete this image?')" class="text-red-500 hover:underline">Delete</a>
+                    <div class="relative group bg-white rounded-lg shadow-md overflow-hidden transform transition-transform hover:scale-105">
+                        <img src="<?php echo BASE_URL . $image; ?>" alt="<?php echo basename($image); ?>" title="<?php echo basename($image); ?>" class="w-full h-40 object-cover">
+                        <div class="absolute inset-0 bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 flex flex-col justify-center items-center transition-opacity p-4">
+                            <div class="text-center">
+                                <button onclick="copyLink('<?php echo BASE_URL . $image; ?>')" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mb-2">Copy Link</button>
+                                <div class="flex justify-center space-x-2">
+                                    <a href="#" onclick="renameFile('<?php echo basename($image); ?>', '<?php echo $_SESSION['csrf_token']; ?>')" class="bg-green-500 hover:bg-green-700 text-white font-bold py-1 px-3 rounded">Rename</a>
+                                    <a href="delete.php?file=<?php echo basename($image); ?>&csrf_token=<?php echo $_SESSION['csrf_token']; ?>" onclick="return confirm('Are you sure you want to delete this image?')" class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-3 rounded">Delete</a>
+                                </div>
                             </div>
                         </div>
                     </div>
