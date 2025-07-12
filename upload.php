@@ -47,9 +47,43 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['files'])) {
         $sanitized_filename = preg_replace('/[^a-zA-Z0-9_-]/', '', $filename_sans_extension);
         $new_filename = uniqid() . '-' . $sanitized_filename . '.' . $extension;
         $destination = UPLOADS_DIR . $new_filename;
-
-        if (!move_uploaded_file($tmp_name, $destination)) {
-            $upload_errors[] = "Failed to move uploaded file: $name";
+        
+        // Additional security check for SVG files
+        if ($extension === 'svg') {
+            // Read the file content
+            $svg_content = file_get_contents($tmp_name);
+            
+            // Check for potentially malicious content
+            $dangerous_patterns = [
+                '/<script[^>]*>/', // JavaScript
+                '/javascript:/', // JavaScript protocol
+                '/eval\s*\(/', // eval() function
+                '/on\w+=["\']/', // event handlers
+                '/xlink:href=["\'](?!#)/', // external links
+                '/data:[^,]*base64/', // data URLs with base64
+                '/<!ENTITY/', // XML entities
+                '/<!DOCTYPE/' // DOCTYPE declarations
+            ];
+            
+            foreach ($dangerous_patterns as $pattern) {
+                if (preg_match($pattern, $svg_content)) {
+                    $upload_errors[] = "Security violation detected in SVG file: $name";
+                    continue 2; // Skip this file
+                }
+            }
+            
+            // Sanitize SVG content (basic sanitization)
+            $svg_content = preg_replace($dangerous_patterns, '', $svg_content);
+            
+            // Write sanitized content to destination
+            if (file_put_contents($destination, $svg_content) === false) {
+                $upload_errors[] = "Failed to save sanitized SVG file: $name";
+            }
+        } else {
+            // For non-SVG files, use the standard move_uploaded_file function
+            if (!move_uploaded_file($tmp_name, $destination)) {
+                $upload_errors[] = "Failed to move uploaded file: $name";
+            }
         }
     }
 

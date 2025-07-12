@@ -1,2 +1,26 @@
 /uploads/
 /config.php
+
+# Node.js dependencies
+/node_modules/
+
+# Environment files
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Build files
+# Uncomment the following line if you want to include the compiled CSS in version control
+# /dist/
+
+# Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db

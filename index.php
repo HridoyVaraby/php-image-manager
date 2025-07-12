@@ -8,7 +8,7 @@ if (!is_dir(UPLOADS_DIR)) {
 }
 
 // Get all uploaded images
-$images = glob(UPLOADS_DIR . '*.{jpg,jpeg,png,gif,webp}', GLOB_BRACE);
+$images = glob(UPLOADS_DIR . '*.{jpg,jpeg,png,gif,webp,svg}', GLOB_BRACE);
 ?>
 
 <!DOCTYPE html>
@@ -17,7 +17,7 @@ $images = glob(UPLOADS_DIR . '*.{jpg,jpeg,png,gif,webp}', GLOB_BRACE);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Simple Image Host</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="dist/output.css" rel="stylesheet">
 </head>
 <body class="bg-gray-100">
     <div class="container mx-auto p-4">
@@ -57,7 +57,13 @@ $images = glob(UPLOADS_DIR . '*.{jpg,jpeg,png,gif,webp}', GLOB_BRACE);
             <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4">
                 <?php foreach ($images as $image): ?>
                     <div class="relative group bg-white rounded-lg shadow-md overflow-hidden transform transition-transform hover:scale-105">
-                        <img src="<?php echo BASE_URL . $image; ?>" alt="<?php echo basename($image); ?>" title="<?php echo basename($image); ?>" class="w-full h-64 object-cover">
+                        <?php $isSvg = pathinfo(basename($image), PATHINFO_EXTENSION) === 'svg'; ?>
+                        <div class="relative">
+                            <img src="<?php echo BASE_URL . $image; ?>" alt="<?php echo basename($image); ?>" title="<?php echo basename($image); ?>" class="w-full h-64 <?php echo $isSvg ? 'object-contain bg-gray-100' : 'object-cover'; ?>">
+                            <?php if ($isSvg): ?>
+                                <div class="absolute top-2 right-2 bg-blue-500 text-white text-xs px-2 py-1 rounded">SVG</div>
+                            <?php endif; ?>
+                        </div>
                         <div class="absolute inset-0 bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 flex flex-col justify-center items-center transition-opacity p-4">
                             <div class="text-center">
                                 <button onclick="copyLink('<?php echo BASE_URL . $image; ?>')" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mb-2">Copy Link</button>
@@ -108,8 +114,25 @@ $images = glob(UPLOADS_DIR . '*.{jpg,jpeg,png,gif,webp}', GLOB_BRACE);
                     reader.onload = (e) => {
                         const img = document.createElement('img');
                         img.src = e.target.result;
-                        img.classList.add('w-full', 'h-32', 'object-cover', 'rounded-lg');
-                        thumbnailPreview.appendChild(img);
+                        img.classList.add('w-full', 'h-32', 'rounded-lg');
+                        
+                        // Special handling for SVG files
+                        if (file.type === 'image/svg+xml') {
+                            img.classList.add('object-contain');
+                            img.classList.add('bg-gray-100');
+                            // Add SVG indicator
+                            const svgBadge = document.createElement('div');
+                            svgBadge.textContent = 'SVG';
+                            svgBadge.classList.add('absolute', 'top-1', 'right-1', 'bg-blue-500', 'text-white', 'text-xs', 'px-2', 'py-1', 'rounded');
+                            const container = document.createElement('div');
+                            container.classList.add('relative');
+                            container.appendChild(img);
+                            container.appendChild(svgBadge);
+                            thumbnailPreview.appendChild(container);
+                        } else {
+                            img.classList.add('object-cover');
+                            thumbnailPreview.appendChild(img);
+                        }
                     };
                     reader.readAsDataURL(file);
                 }
