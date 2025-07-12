@@ -1,5 +1,6 @@
 /uploads/
 /config.php
+/simple_image_host.zip
 
 # Node.js dependencies
 /node_modules/

@@ -32,7 +32,7 @@ This project is ideal for developers who need a simple, self-hosted solution for
 2.  **Navigate to the project directory:**
 
     ```bash
-    cd simple-image-host
+    cd php-image-manager
     ```
 
 3.  **Configure the application:**
