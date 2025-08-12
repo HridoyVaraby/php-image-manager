@@ -18,6 +18,7 @@
 
 # Editor files
 .vscode/
+.kiro/*
 .idea/
 *.swp
 *.swo

@@ -1,0 +1,10 @@
+version: '3'
+services:
+  php-image-manager:
+    build: .
+    container_name: php-image-manager
+    ports:
+      - "3007:80"  # Host port 3007 maps to container's Apache port 80
+    volumes:
+      - ./public/uploads:/var/www/html/uploads
+    restart: always
