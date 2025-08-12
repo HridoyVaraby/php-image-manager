@@ -1,8 +1,8 @@
 <?php
 // Basic configuration
 define('UPLOADS_DIR', 'uploads/');
-define('USERNAME', 'admin');
-define('PASSWORD', 'password'); // Change this!
+define('USERNAME', 'Varabit');
+define('PASSWORD', '192918541525Hv@images'); // Change this!
 
 define('BASE_URL', (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST'] . rtrim(dirname($_SERVER['SCRIPT_NAME']), '/\\') . '/');
 

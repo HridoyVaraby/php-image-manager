@@ -16,13 +16,14 @@ $images = glob(UPLOADS_DIR . '*.{jpg,jpeg,png,gif,webp,svg}', GLOB_BRACE);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Simple Image Host</title>
+    <title>Varabit Simple Image Host</title>
+    <link rel="icon" type="image/png" href="favicon.png">
     <link href="dist/output.css" rel="stylesheet">
 </head>
 <body class="bg-gray-100">
     <div class="container mx-auto p-4">
         <div class="flex justify-between items-center mb-4">
-            <h1 class="text-2xl font-bold">Simple Image Host</h1>
+            <h1 class="text-2xl font-bold">Varabit Simple Image Host</h1>
             <a href="logout.php" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">Logout</a>
         </div>
 
